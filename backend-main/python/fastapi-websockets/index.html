@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      body:has(h1 > span.on) {
+        background-color: #c0e0c0;
+        & h1 > span.on::after {
+          content: " (ON)";
+        }
+      }
+      body:has(h1 > span.off) {
+        background-color: #e0c0c0;
+        & h1 > span.off::after {
+          content: " (OFF)";
+        }
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Connect to our FastAPI server
+        const ws = new WebSocket("ws://localhost:8000/ws");
+
+        // When a message arrives from the server
+        ws.onmessage = (event) => {
+          const statusText = document.getElementById("statusText");
+          statusText.className = event.data === "on" ? "on" : "off";
+          console.log("Class set to", statusText.className);
+        };
+
+        function toggle() {
+          const current = document.getElementById("statusText").className;
+          const nextStatus = current === "on" ? "off" : "on";
+          // Send the new status to the server
+          ws.send(nextStatus);
+        }
+
+        document.getElementById("toggle").addEventListener("click", toggle);
+      });
+    </script>
+  </head>
+  <body>
+    <h1>
+      shared status with raw messages:
+      <span id="statusText" class="on"></span>
+    </h1>
+    <button id="toggle">Toggle Status</button>
+  </body>
+</html>

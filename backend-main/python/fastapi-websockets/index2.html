@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      body:has(h1 > span.on) {
+        background-color: #f1f8e9;
+        & h1 > span.on::after {
+          content: " (ON)";
+        }
+      }
+      body:has(h1 > span.off) {
+        background-color: #fff0f0;
+        & h1 > span.off::after {
+          content: " (OFF)";
+        }
+      }
+      #meta {
+        color: gray;
+        font-size: 0.8em;
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Generate a random ID so we can see who "flipped the switch"
+        const myId = "User-" + Math.floor(Math.random() * 1000);
+        const ws = new WebSocket(`ws://localhost:8000/ws/${myId}`);
+
+        ws.onmessage = (event) => {
+          // Parse the JSON string back into a JS Object
+          const data = JSON.parse(event.data);
+
+          // Update the UI
+          document.getElementById("meta").innerText =
+            `Last updated by ${data.sender} at ${data.time}`;
+          statusText.className = data.status === "on" ? "on" : "off";
+          console.log("Class set to", statusText.className);
+        };
+
+        function toggle() {
+          const current = document.getElementById("statusText").className;
+          const nextStatus = current === "on" ? "off" : "on";
+
+          // Send a JSON object as a string
+          const payload = { status: nextStatus };
+          ws.send(JSON.stringify(payload));
+        }
+        document.getElementById("toggle").addEventListener("click", toggle);
+      });
+    </script>
+  </head>
+  <body>
+    <h1>
+      shared status with JSON messages:
+      <span id="statusText" class="off"></span>
+    </h1>
+    <p id="meta">---</p>
+
+    <button id="toggle">Toggle Switch</button>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>GET request</h1>
+    <ul>
+        <li>client={{client}}</li>
+        <li>path={{request}}</li>
+        <li>data
+            <ul>
+                {% for key, value in data.items() %}
+                <li>{{key}}={{value}}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+</body>
+</html>

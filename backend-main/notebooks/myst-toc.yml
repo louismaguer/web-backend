@@ -1,0 +1,30 @@
+version: 1
+
+# ouch: only the .md files are included in the output
+# this is why we have paired all the notebooks with a .md file
+
+# about url links; not supported as of feb 2025; follow up on
+# https://mystmd.org/guide/table-of-contents#url-entries
+# https://github.com/jupyter-book/mystmd/issues/1445
+
+
+project:
+  toc:
+
+    - file: 0-00-intro.md
+
+    - title: "Intro to networking"
+      children:
+        - pattern: 1-*.md
+
+    - title: "Server side"
+      children:
+        - pattern: 2-*.md
+
+    - title: "FastAPI"
+      children:
+        - pattern: 3-*.md
+
+    - title: "optional content"
+      children:
+        - pattern: 4-*.md
