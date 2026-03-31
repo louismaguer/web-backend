@@ -35,3 +35,6 @@ evenements_df = pd.read_csv(data / 'evenements_associations.csv')
 ## your code (route handlers) goes here
 # -----------------
 
+@app.get("/api/alive")
+def read_root():
+    return {"message": "Alive"}
