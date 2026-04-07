@@ -38,3 +38,13 @@ evenements_df = pd.read_csv(data / 'evenements_associations.csv')
 @app.get("/api/alive")
 def read_root():
     return {"message": "Alive"}
+
+@app.get("/api/associations")
+def get_associations():
+    return associations_df["nom"].to_list()
+
+@app.get("/api/association/{id}")
+def get_association(id: int):
+    if id not in associations_df["id"].values:
+        return {"error": "Association not found"}
+    return associations_df.loc[id-1,:].to_dict()
